@@ -7,19 +7,21 @@ public class RandomLine : MonoBehaviour
 {
     public TileBase dirt;
     public Tilemap map;
+    public int pathLength = 20;
     // Start is called before the first frame update
     void Start()
     {
         int count = 0;
-        while(count <= 3)
+        while(count < 3)
         {
-            Vector3Int[] positions = new Vector3Int[100];
-            positions[0] = new Vector3Int(Random.Range(0, 32), Random.Range(0, 32), 0);
+            List<Vector3Int> positions = new List<Vector3Int>();
+            positions.Add( new Vector3Int(Random.Range(0, 32), Random.Range(0, 32), 0));
+            Debug.Log(positions[0]);
 
-            for (int x = 1; x < positions.Length; x++)
+            for (int x = 1; x < pathLength; x++)
             {
-                int rnd = 0;
-                positions[x] = positions[x - 1];
+                int rnd;
+                positions.Add(positions[x - 1]);
                 List<Vector3Int> possibleMove = new List<Vector3Int>();
                 possibleMove.Add(new Vector3Int(1, 0, 0));
                 possibleMove.Add(new Vector3Int(-1, 0, 0));
@@ -28,30 +30,31 @@ public class RandomLine : MonoBehaviour
                 if (x > 1)
                 {
                     Vector3Int moveDone = positions[x - 1] - positions[x - 2];
-                    Debug.Log("moveDove " + moveDone);
                     moveDone.x *= -1;
                     moveDone.y *= -1;
                     possibleMove.Remove(moveDone);
-                    foreach (Vector3Int move in possibleMove)
-                    {
-                        Debug.Log(move);
-                    }
                     rnd = Random.Range(0, possibleMove.Count);
                     positions[x] += possibleMove[rnd];
+                    if (positions[x].x > 32 || positions[x].x < 0 || positions[x].y > 32 || positions[x].y < 0)
+                    {
+                        positions[x] -= possibleMove[rnd];
+                        break;
+                    }
                 }
                 else
                 {
                     rnd = Random.Range(0, possibleMove.Count);
                     positions[x] += possibleMove[rnd];
+                    if (positions[x].x > 32 || positions[x].x < 0 || positions[x].y > 32 || positions[x].y < 0)
+                    {
+                        positions[x] -= possibleMove[rnd];
+                        break;
+                    }
                 }
 
             }
-            for (int p = 0; p < positions.Length; p++)
-            {
-                Debug.Log(positions[p]);
-            }
-
-            for (int i = 0; i < positions.Length; i++)
+            Vector3Int[] pos = positions.ToArray();
+            for (int i = 0; i < pos.Length; i++)
             {
                 map.SetTile(new Vector3Int(positions[i].x, positions[i].y, 0), dirt);
             }
@@ -60,14 +63,4 @@ public class RandomLine : MonoBehaviour
         
     }
 
-    void checkExist(Vector3Int[] pos, int i)
-    {
-        if(i > 1)
-        {
-            if(pos[i] == pos[i - 2])
-            {
-                pos[i].x++;
-            }
-        }
-    }
 }
