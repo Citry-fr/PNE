@@ -7,16 +7,17 @@ public class RandomLine : MonoBehaviour
 {
     public TileBase dirt;
     public Tilemap map;
+    public TileBase target;
     public int pathLength = 20;
+    public int numberOfPath = 3;
     // Start is called before the first frame update
     void Start()
     {
         int count = 0;
-        while(count < 3)
+        while(count < numberOfPath)
         {
             List<Vector3Int> positions = new List<Vector3Int>();
             positions.Add( new Vector3Int(Random.Range(0, 32), Random.Range(0, 32), 0));
-            Debug.Log(positions[0]);
 
             for (int x = 1; x < pathLength; x++)
             {
@@ -60,7 +61,21 @@ public class RandomLine : MonoBehaviour
             }
             count++;
         }
-        
+
+        for (int x = 0; x <= 32; x++)
+        {
+            for (int y = 0; y <= 32; y++)
+            {
+                Vector3Int pos = new Vector3Int(x, y, 0);
+                if (map.HasTile(pos))
+                {
+                    TileBase current = map.GetTile(pos);
+                    Debug.Log(current == target);
+                }
+
+            }
+        }
+
     }
 
 }

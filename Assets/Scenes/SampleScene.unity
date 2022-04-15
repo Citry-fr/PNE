@@ -525,7 +525,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dirt: {fileID: 11400000, guid: 270b42fc615984e4ab73ccf2b9b34da2, type: 2}
   map: {fileID: 153259879}
-  pathLength: 20
+  target: {fileID: 11400000, guid: 6c12f2654d7c5444b8e2003a714994f9, type: 2}
+  pathLength: 25
+  numberOfPath: 30
 --- !u!4 &1043932195
 Transform:
   m_ObjectHideFlags: 0
